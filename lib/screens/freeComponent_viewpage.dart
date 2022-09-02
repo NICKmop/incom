@@ -1,9 +1,10 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_easyloading/flutter_easyloading.dart';
+import 'package:get/get.dart';
 
 import '../constants/colors.constants.dart';
-import '../constants/common.constants.dart';
 
 class freeComponent_viewpage extends StatefulWidget {
   const freeComponent_viewpage({Key? key}) : super(key: key);
@@ -21,28 +22,29 @@ class freeComponentviewpageState extends State<freeComponent_viewpage> {
   List<Widget> itemsData = [];
 
 
-  Future<void> getPostsData() async {
-
+  Future<void> getPostsData(value) async {
+    print("click");
+    if(value == null){
+      print("들어온 변수가 null 값입니다.");
+      value = 'GANGBUK';
+    }
     DocumentReference<Map<String, dynamic>> docref =
-    FirebaseFirestore.instance.collection("crawlingData").doc('DONGJAK');
+    FirebaseFirestore.instance.collection("crawlingData").doc(value);
+    print(docref.get());
     final DocumentSnapshot<Map<String, dynamic>> documentSnapshot =
         await docref.get();
+
     var valueDoc = documentSnapshot.data();
-    
     List<dynamic> valueData = [];
     valueDoc?.forEach((key, value) {
       valueData.add(value);
-      print("value : $value");
     });
-    
+
     List<dynamic> responseList= valueData;
     // List<dynamic> responseList = FOOD_DATAs;
     List<Widget> listItems = [];
 
     for ( var post in responseList){
-
-      print(post['center_name']);
-
       listItems.add(Container(
           height: 150,
           margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
@@ -51,74 +53,63 @@ class freeComponentviewpageState extends State<freeComponent_viewpage> {
           ]),
           child: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
               children: <Widget>[
-                Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: <Widget>[
-                    Text(
-                      '${post["title"]}',
-                      style: const TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-                    ),
-                    Text(
-                      '기관명 | ${post['center_name ']}',
-                      style: const TextStyle(fontSize: 17, color: Colors.grey),
-                    ),
-                    const SizedBox(
-                      height: 10,
-                    ),
-                    Text(
-                      '시작일 | ${post['registrationdate']}',
-                      style: const TextStyle(fontSize: 17, color: Colors.grey),
-                    ),
-                  ],
+                Text(
+                  '${post["title"]}',
+                  style: const TextStyle(fontSize: 14),
+                  overflow: TextOverflow.ellipsis,
+                  textAlign: TextAlign.justify,
+                  maxLines: 3,
                 ),
+                const SizedBox(
+                 height: 15,
+                 ),
+                Text(
+                  '기관명 | ${post['center_name ']}',
+                  style: const TextStyle(fontSize: 17, color: Colors.grey),
+                  textDirection: TextDirection.ltr,
+                ),
+                Text(
+                  '시작일 | ${post['registrationdate']}',
+                  style: const TextStyle(fontSize: 17, color: Colors.grey),
+                  textDirection: TextDirection.ltr,
+                ),
+                // Expanded(
+                //     child: Row(
+                //       mainAxisAlignment: MainAxisAlignment.spaceAround,
+                //       children: [
+                //         Container(
+                //           decoration:  const BoxDecoration(
+                //             border: Border(
+                //               right: BorderSide(color: AppColors.black),
+                //               top: BorderSide(color: AppColors.black)
+                //             )
+                //           ),
+                //           child: IconButton(
+                //             icon: Icon(Icons.add),
+                //             onPressed: () {},
+                //           ),
+                //         ),
+                //         Container(
+                //           decoration:  const BoxDecoration(
+                //               border: Border(
+                //                   top: BorderSide(color: AppColors.black)
+                //               )
+                //           ),
+                //           child: IconButton(
+                //             icon: Icon(Icons.add),
+                //             onPressed: () {},
+                //           ),
+                //         )
+                //       ],
+                //     )
+                // )
               ],
             ),
           )));
     }
-    // for (var post in responseList) {
-    //   listItems.add(Container(
-    //       height: 150,
-    //       margin: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
-    //       decoration: BoxDecoration(borderRadius: BorderRadius.all(Radius.circular(20.0)), color: Colors.white, boxShadow: [
-    //         BoxShadow(color: Colors.black.withAlpha(100), blurRadius: 10.0),
-    //       ]),
-    //       child: Padding(
-    //         padding: const EdgeInsets.symmetric(horizontal: 20.0, vertical: 15),
-    //         child: Row(
-    //           mainAxisAlignment: MainAxisAlignment.spaceBetween,
-    //           children: <Widget>[
-    //             Column(
-    //               crossAxisAlignment: CrossAxisAlignment.start,
-    //               children: <Widget>[
-    //                 Text(
-    //                   post["name"],
-    //                   style: const TextStyle(fontSize: 28, fontWeight: FontWeight.bold),
-    //                 ),
-    //                 Text(
-    //                   post["brand"],
-    //                   style: const TextStyle(fontSize: 17, color: Colors.grey),
-    //                 ),
-    //                 const SizedBox(
-    //                   height: 10,
-    //                 ),
-    //                 Text(
-    //                   "\$ ${post["price"]}",
-    //                   style: const TextStyle(fontSize: 25, color: Colors.black, fontWeight: FontWeight.bold),
-    //                 ),
-    //                 IconButton(
-    //                   iconSize: 2,
-    //                   onPressed: (){getfirePostsData();},
-    //                   icon: Icon(Icons.ac_unit)
-    //                 )
-    //               ],
-    //             ),
-    //           ],
-    //         ),
-    //       )));
-    // }
     setState(() {
       itemsData = listItems;
     });
@@ -127,7 +118,8 @@ class freeComponentviewpageState extends State<freeComponent_viewpage> {
   @override
   void initState() {
     super.initState();
-    getPostsData();
+
+    getPostsData(null);
     controller.addListener(() {
 
       double value = controller.offset/119;
@@ -160,7 +152,122 @@ class freeComponentviewpageState extends State<freeComponent_viewpage> {
         ),
         backgroundColor: Colors.white,
         drawer: Drawer( // 함수로 뺴야하는 부분
-          child: RESION_LIST_MENU
+          child: ListView(
+            padding: EdgeInsets.zero,
+            children: <Widget>[
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('강남'),
+                onTap: () {
+                  EasyLoading.show(status: " 데이터 로딩 중...");
+                  getPostsData('GANGNAM');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('강북'),
+                onTap: () {
+                  getPostsData('GANGBUK');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('관악'),
+                onTap: () {
+                  getPostsData('GWANAK');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('광진'),
+                onTap: () {
+                  getPostsData('GWANGZIN');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('동작'),
+                onTap: () {
+                  getPostsData('DONGJAK');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('서초'),
+                onTap: () {
+                  getPostsData('SEOCHO');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('성북'),
+                onTap: () {
+                  getPostsData('SEONGBUK');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('양천'),
+                onTap: () {
+                  getPostsData('YANGCHEON');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('영등포'),
+                onTap: () {
+                  getPostsData('YEONGDEUNGPO');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('종로'),
+                onTap: () {
+                  getPostsData('JONGRO');
+                },
+              ),
+              ListTile(
+                leading: Icon(
+                  Icons.home,
+                  color: Colors.grey[850],
+                ),
+                title: Text('중구'),
+                onTap: () {
+                  getPostsData("JUNGGU");
+                },
+              ),
+            ],
+          )
         ),
         body: SizedBox(
           height: size.height,

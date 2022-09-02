@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:incom/screens/mypage.screen.dart';
 
 import '../constants/colors.constants.dart';
 import '../controller/HomeController.dart';
@@ -63,7 +64,8 @@ class mainScreenState extends State<mainScreen> {
             index: navigationController.currentBottomMenuIndex.value,
             children: const[
               freeComponent_viewpage(),
-              crawlingScreen(),
+              // crawlingScreen(),
+              mypageScreen(),
             ],
           )
       ),

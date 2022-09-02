@@ -59,7 +59,7 @@ class _LoginScreenState extends State<LoginScreen> {
                       text: "구글 로그인",
                       onPressed: () async {
                         try {
-                          print("111");
+                          EasyLoading.show(status: " 로그인...");
                           final account = await googleSignIn.signIn();
 
                           if (account == null) {
@@ -115,6 +115,17 @@ class _LoginScreenState extends State<LoginScreen> {
                         }
                       },
                     ),
+                    // IconButton(
+                    //   iconSize: 250,
+                    //   onPressed: () async {
+                    //     await viewModel.login();
+                    //     setState(() {});
+                    //     EasyLoading.show(status: "카카오 로그인 성공...");
+                    //     Get.offAll(() => const mainScreen());
+                    //   },
+                    //   icon: Image.asset(
+                    //     "assets/images/kakao_login_large_wide.png"),
+                    // )
                     SignInButton(
                       Buttons.Google,
                       text: "Kakao 로그인",
