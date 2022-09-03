@@ -14,116 +14,68 @@ class _mypageScreenState extends State<mypageScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-        body: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-            child: ListView(
-              children: <Widget>[
-                imageProfile(),
-                SizedBox(height: 20),
-                nameTextField(),
-                SizedBox(height: 20),
-              ],
-            )
-        )
-    );
-  }
-
-  Widget imageProfile() {
-    return Center(
-      child: Stack(
-        children: <Widget>[
-          CircleAvatar(
-            radius: 80,
-            // backgroundImage: AssetImage('assets/'),
+        backgroundColor: Colors.greenAccent,
+        appBar: AppBar(
+          backgroundColor: Colors.green,
+          centerTitle: true,
+          elevation: 0.0,
+          leading: IconButton(
+          icon: Icon(Icons.menu),
+            onPressed: () {
+              print('menu button is clicked');
+            },
           ),
-          // Positioned(
-              // bottom: 20,
-              // right: 20,
-              // child: InkWell(
-                // onTap: () {
-                  // showModalBottomSheet(context: context, builder: ((builder) => bottomSheet()));
-                // },
-                // child: Icon(
-                //   Icons.camera_alt,
-                //   color: secondaryTextColor,
-                //   size: 40,
-                // ),
-              // )
-          // )
-        ],
-      ),
-    );
-  }
-
-  Widget nameTextField() {
-    return TextFormField(
-      decoration: InputDecoration(
-          border: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.black,
+          actions: [
+            IconButton(
+              icon: Icon(Icons.shopping_cart),
+              onPressed: () {
+                print('shopping cart button is clicked');
+              },
             ),
-          ),
-          focusedBorder: OutlineInputBorder(
-            borderSide: BorderSide(
-              color: Colors.black,
-              width: 2,
-            ),
-          ),
-          prefixIcon: Icon(
-            Icons.person,
-            color: Colors.black,
-          ),
-          labelText: 'Name',
-          hintText: 'Input your name'
-      ),
-    );
-  }
-
-  Widget bottomSheet() {
-    return Container(
-        height: 100,
-        // width: MediaQuery.of(context).size.width,
-        margin: EdgeInsets.symmetric(
-            horizontal: 20,
-            vertical: 20
-        ),
-        child: Column(
-          children: <Widget>[
-            Text(
-              'Choose Profile photo',
-              style: TextStyle(
-                fontSize: 20,
-              ),
-            ),
-            SizedBox(height: 20,),
-            Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                FlatButton.icon(
-                  icon: Icon(Icons.camera, size: 50,),
-                  onPressed: () {
-                    // takePhoto(ImageSource.camera);
-                  },
-                  label: Text('Camera', style: TextStyle(fontSize: 20),),
-                ),
-                FlatButton.icon(
-                  icon: Icon(Icons.photo_library, size: 50,),
-                  onPressed: () {
-                    // takePhoto(ImageSource.gallery);
-                  },
-                  label: Text('Gallery', style: TextStyle(fontSize: 20),),
-                )
-              ],
+            IconButton(
+              icon: Icon(Icons.search),
+              onPressed: () {
+                print('search button is clicked');
+              },
             )
           ],
-        )
-    );
-  }
-
-  // takePhoto(ImageSource source) async {
-  //   final pickedFile = await _picker.getImage(source: source);
-  //   setState(() {
-  //     _imageFile = pickedFile;
-  //   });
-  // }
+          title: Text('Profile'),
+        ),
+      body: Padding(
+          padding: EdgeInsets.fromLTRB(30.0, 40.0, 0, 0),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Center(
+                child: CircleAvatar(
+                  backgroundImage: AssetImage("assets/camera.png"),
+                  radius: 60.0,
+                ),
+              ),
+              Divider(
+                height: 60.0,
+                color: Colors.grey[850],
+                thickness: 0.8,
+                endIndent: 30.0,
+              ),
+              const Text('Name',
+                style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing: 3.0,
+                ),
+              ),
+              const SizedBox(height: 10.0,),
+              const Text('이창섭',
+                style: TextStyle(
+                  color: Colors.white,
+                  letterSpacing:2.0,
+                  fontSize: 20.0,
+                  fontWeight: FontWeight.bold,
+                ),
+              )
+            ],
+          ),
+        ),
+      );
+    }
 }
